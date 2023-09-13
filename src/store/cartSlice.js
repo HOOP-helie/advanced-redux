@@ -15,23 +15,34 @@ export const cartSlice = createSlice({
         },
         addItemToCart: (state, action) => {
             const data = action.payload;
-           
-            const newItem = {
-                id: data.id,
-                title: data.title,
-                quantity: 1,
-                total: data.price,
-                price: data.price
+            const alreadyInCartItem = state.items.find(item => item.id === data.id);
+            const itemsArr = [...state.items]
 
+            if (alreadyInCartItem) {
+                const modifiedItem = {
+                    ...alreadyInCartItem,
+                    quantity: alreadyInCartItem.quantity + 1,
+                    total: alreadyInCartItem.total + alreadyInCartItem.price
+                }
+                let indexOfItem = state.items.indexOf(alreadyInCartItem)
+                itemsArr[indexOfItem] = modifiedItem;
+
+            } else {
+                const newItem = {
+                    ...data,
+                    quantity: 1,
+                    total: data.price
+                }
+
+                itemsArr.push(newItem)
             }
-            const itemsArr = [...state.items, newItem]
+
             state.items = itemsArr
 
         }
     },
 })
 
-// Action creators are generated for each case reducer function
 export const { toggleCart, addItemToCart } = cartSlice.actions
 
 export default cartSlice.reducer

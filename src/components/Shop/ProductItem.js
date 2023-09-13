@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { addItemToCart } from "./../../store/cartSlice"
 
 const ProductItem = (props) => {
-  const { title, price, description } = props;
+  const { id, title, price, description } = props;
   const dispatch = useDispatch();
-
+  console.log(props)
   const addItemHandler = () => {
     const item = {
       ...props
