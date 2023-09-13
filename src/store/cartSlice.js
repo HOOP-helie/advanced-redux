@@ -15,31 +15,29 @@ export const cartSlice = createSlice({
         },
         addItemToCart: (state, action) => {
             const data = action.payload;
-            const alreadyInCartItem = state.items.find(item => item.id === data.id);
-            const itemsArr = [...state.items]
+            const itemIndex = state.items.findIndex(item => item.id === data.id);
 
-            if (alreadyInCartItem) {
-                const modifiedItem = {
-                    ...alreadyInCartItem,
-                    quantity: alreadyInCartItem.quantity + 1,
-                    total: alreadyInCartItem.total + alreadyInCartItem.price
-                }
-                let indexOfItem = state.items.indexOf(alreadyInCartItem)
-                itemsArr[indexOfItem] = modifiedItem;
-
+            if (itemIndex !== -1) {
+                state.items = state.items.map((item, index) => {
+                    if (index === itemIndex) {
+                        return {
+                            ...item,
+                            quantity: item.quantity + 1,
+                            total: item.total + item.price
+                        };
+                    }
+                    return item;
+                });
             } else {
                 const newItem = {
                     ...data,
                     quantity: 1,
                     total: data.price
-                }
-
-                itemsArr.push(newItem)
+                };
+                state.items = [...state.items, newItem];
             }
-
-            state.items = itemsArr
-
         }
+
     },
 })
 
