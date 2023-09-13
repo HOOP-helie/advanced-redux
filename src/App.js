@@ -7,7 +7,8 @@ function App() {
   const showCart = useSelector(state => state.cart.showCart)
   return (
     <Layout>
-      {showCart && <Cart />}
+      {/* {showCart && <Cart />} */}
+      <Cart />
       <Products />
     </Layout>
   );
