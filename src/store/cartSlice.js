@@ -15,53 +15,36 @@ export const cartSlice = createSlice({
         },
         addItem: (state, action) => {
             const data = action.payload;
-            const itemIndex = state.items.findIndex(item => item.id === data.id);
+            const existingItem = state.items.find((item) => item.id === data.id)
 
-            if (itemIndex !== -1) {
-                state.items = state.items.map((item, index) => {
-                    if (index === itemIndex) {
-                        return {
-                            ...item,
-                            quantity: item.quantity + 1,
-                            total: item.total + item.price
-                        };
-                    }
-                    return item;
-                });
-            } else {
+            if (!existingItem) {
                 const newItem = {
                     ...data,
                     quantity: 1,
                     total: data.price
                 };
-                state.items = [...state.items, newItem];
+                state.items.push(newItem)
+
+            } else {
+                existingItem.quantity++
+                existingItem.total = existingItem.total + existingItem.price
             }
         },
 
         removeItem: (state, action) => {
             const data = action.payload
+            const existingItem = state.items.find((item) => item.id === data.id)
 
-            const itemIndex = state.items.findIndex(item => item.id === data.id)
-
-            if (itemIndex !== -1) {
-                if (state.items[itemIndex].quantity > 1) {
-                    state.items = state.items.map((item, index) => {
-                        if (index === itemIndex) {
-                            return {
-                                ...item,
-                                quantity: item.quantity - 1,
-                                total: item.total - item.price
-                            };
-                        }
-                        return item;
-                    });
-                } else {
-                    state.items = state.items.filter(item => item.id !== data.id);
-                }
+            if (existingItem.quantity > 1) {
+                existingItem.quantity--
+                existingItem.total = existingItem.total - existingItem.price
+            } else {
+                state.items = state.items.filter(item => item.id !== data.id);
             }
         }
+    }
 
-    },
+
 })
 
 export const { toggleCart, addItem, removeItem } = cartSlice.actions

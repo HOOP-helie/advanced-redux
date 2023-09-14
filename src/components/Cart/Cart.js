@@ -8,16 +8,18 @@ const Cart = () => {
 
   let cartContent;
 
-  if (cart.items === 0) {
+  if (cart.items.length === 0) {
     cartContent = <p>No items in your cart yet</p>
   } else {
-    cartContent = cart.items.map(cartItem => {
-      return (
-        <ul><CartItem
-          item={{ ...cartItem }}
-        /></ul>
-      )
-    })
+    cartContent = <ul>{
+      cart.items.map(cartItem => {
+        return (
+          <CartItem
+            key={Math.random()}
+            item={{ ...cartItem }}
+          />
+        )
+      })}</ul>
   }
   return (
     <Card className={classes.cart}>
